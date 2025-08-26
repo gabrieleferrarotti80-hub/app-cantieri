@@ -5,7 +5,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import DocumentModal from './DocumentModal';
 import MaskLayout from './MaskLayout';
-import ActionButtons from './ActionButtons'; // Importiamo il nuovo componente
+import ActionButtons from './ActionButtons';
 
 // Funzione di utilità per simulare l'apertura di un file picker
 const openFilePicker = (accept) => {
@@ -30,17 +30,16 @@ const PrepostoMask = ({ user, onLogout }) => {
     const [cantieri, setCantieri] = useState([]);
     const [selectedCantiere, setSelectedCantiere] = useState('');
     const [selectedCantiereName, setSelectedCantiereName] = useState('');
-    const [cantieriLoading, setCantieriLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
     const [documents, setDocuments] = useState([]);
 
-    const { cantieri: cantieriFromHook, loading } = useCantieri(user, db);
+    // Usa il tuo hook per recuperare cantieri, loading e il companyID
+    const { cantieri: cantieriFromHook, loading, companyID } = useCantieri(user, db);
 
     useEffect(() => {
         setCantieri(cantieriFromHook);
-        setCantieriLoading(loading);
         if (!loading && cantieriFromHook.length > 0) {
             setSelectedCantiere(cantieriFromHook[0].id);
             setSelectedCantiereName(cantieriFromHook[0].nome);
@@ -92,7 +91,8 @@ const PrepostoMask = ({ user, onLogout }) => {
     };
 
     // Funzione per salvare un report su Firestore
-    const saveReport = async (reportType, fileUrls, location) => {
+    // Accetta anche il companyID come parametro
+    const saveReport = async (reportType, fileUrls, location, companyId) => {
         if (!selectedCantiere) {
             setStatusMessage("Per favore, seleziona un cantiere prima di procedere.");
             return;
@@ -106,9 +106,11 @@ const PrepostoMask = ({ user, onLogout }) => {
         setStatusMessage(`Salvataggio ${reportType}...`);
 
         try {
-            const reportsRef = collection(db, `artifacts/${user.uid}/reports`);
+            // Usa la collezione 'reports' direttamente
+            const reportsRef = collection(db, "reports");
             await addDoc(reportsRef, {
                 userId: user.uid,
+                companyID: companyId, // Usa il companyID passato come parametro
                 cantiereId: selectedCantiere,
                 tipologia: reportType,
                 data: serverTimestamp(),
@@ -123,10 +125,14 @@ const PrepostoMask = ({ user, onLogout }) => {
             setIsSaving(false);
         }
     };
-
+    
     // Gestione della foto
-    const handlePhoto = async (type) => {
+    const handlePhoto = async () => {
         try {
+            if (!companyID) {
+                setStatusMessage("ID azienda non disponibile. Riprova tra poco.");
+                return;
+            }
             const file = await openFilePicker('image/*');
             setStatusMessage("Caricamento della foto...");
             const storage = getStorage();
@@ -134,7 +140,8 @@ const PrepostoMask = ({ user, onLogout }) => {
             await uploadBytes(storageRef, file);
             const fileUrl = await getDownloadURL(storageRef);
             const location = await getGpsLocation();
-            await saveReport(type, [fileUrl], location);
+            // Passa companyID alla funzione saveReport
+            await saveReport("photo", [fileUrl], location, companyID);
         } catch (error) {
             console.error("Errore nel processo foto:", error);
             setStatusMessage(`Errore nel processo foto: ${error.message}`);
@@ -144,6 +151,10 @@ const PrepostoMask = ({ user, onLogout }) => {
     // Gestione del video
     const handleVideo = async () => {
         try {
+            if (!companyID) {
+                setStatusMessage("ID azienda non disponibile. Riprova tra poco.");
+                return;
+            }
             const file = await openFilePicker('video/*');
             setStatusMessage("Caricamento del video...");
             const storage = getStorage();
@@ -151,7 +162,8 @@ const PrepostoMask = ({ user, onLogout }) => {
             await uploadBytes(storageRef, file);
             const fileUrl = await getDownloadURL(storageRef);
             const location = await getGpsLocation();
-            await saveReport("video", [fileUrl], location);
+            // Passa companyID alla funzione saveReport
+            await saveReport("video", [fileUrl], location, companyID);
         } catch (error) {
             console.error("Errore nel processo video:", error);
             setStatusMessage(`Errore nel processo video: ${error.message}`);
@@ -165,7 +177,7 @@ const PrepostoMask = ({ user, onLogout }) => {
             selectedCantiere={selectedCantiere}
             onCantiereChange={handleCantiereChange}
             cantieri={cantieri}
-            cantieriLoading={cantieriLoading}
+            cantieriLoading={loading}
             isSaving={isSaving}
             title="Benvenuto, Preposto"
             subtitle={user?.email}

@@ -3,24 +3,27 @@ import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/fire
 
 /**
  * @file useCantieri.js
- * @description Hook personalizzato per recuperare in tempo reale i cantieri assegnati a un utente.
+ * @description Hook personalizzato per recuperare in tempo reale i cantieri assegnati a un utente e il companyID.
  * Aggiunti log di debug per diagnosticare problemi di query.
  */
 
 /**
- * Hook personalizzato per recuperare i cantieri assegnati a un utente.
+ * Hook personalizzato per recuperare i cantieri assegnati a un utente e il companyID.
  * @param {Object} user L'oggetto utente Firebase (Auth).
  * @param {Object} db L'istanza del database Firestore.
- * @returns {Object} Un oggetto contenente la lista dei cantieri e lo stato di caricamento.
+ * @returns {Object} Un oggetto contenente la lista dei cantieri, lo stato di caricamento e il companyID.
  */
 export const useCantieri = (user, db) => {
     const [cantieri, setCantieri] = useState([]);
     const [loading, setLoading] = useState(true);
+    // Aggiungo uno stato per memorizzare il companyID
+    const [companyID, setCompanyID] = useState(null); 
 
     useEffect(() => {
         if (!user || !db) {
             setLoading(false);
             setCantieri([]);
+            setCompanyID(null);
             return;
         }
 
@@ -37,6 +40,8 @@ export const useCantieri = (user, db) => {
 
                 // DEBUG: Log dei dati dell'utente, in particolare companyID.
                 console.log('DEBUG: Dati dell\'utente recuperati:', userData);
+                // Salvo il companyID nello stato
+                setCompanyID(userData.companyID); 
                 
                 const assegnazioniQuery = query(
                     collection(db, 'assegnazioneCantieri'),
@@ -87,6 +92,7 @@ export const useCantieri = (user, db) => {
                 return () => unsubscribe();
             } else {
                 setCantieri([]);
+                setCompanyID(null);
                 setLoading(false);
             }
         }, (error) => {
@@ -97,5 +103,6 @@ export const useCantieri = (user, db) => {
         return () => unsubscribeUser();
     }, [user, db]);
 
-    return { cantieri, loading };
+    // Ritorna il companyID assieme agli altri valori
+    return { cantieri, loading, companyID };
 };
