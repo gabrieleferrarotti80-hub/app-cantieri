@@ -1,0 +1,39 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "assegnazioneCantieri",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "companyID",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "prepostoId",
+          "order": "ASCENDING"
+        }
+      ],
+      "density": "SPARSE_ALL"
+    },
+    {
+      "collectionGroup": "assegnazioneCantieri",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "companyID",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "prepostoId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "cantiereId",
+          "order": "ASCENDING"
+        }
+      ],
+      "density": "SPARSE_ALL"
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "gestionale-cantieri-app-12345",
+    "new-version": "cantiere-app-nuovo"
+  },
+  "targets": {},
+  "etags": {}
+}

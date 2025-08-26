@@ -1,0 +1,53 @@
+    <!DOCTYPE html>
+    <html lang="it">
+      <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#4F46E5" /> <!-- Colore tema per la barra del browser -->
+        <meta
+          name="description"
+          content="App di gestione cantieri per operatori, tecnici e gestori."
+        />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+        <!--
+          Il manifest.json fornisce metadati all'app web e viene utilizzato dal browser o dal sistema operativo.
+          Scopri di più su https://developers.google.com/web/fundamentals/web-app-manifest/
+        -->
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <!--
+          Le notifiche web root possono essere servite da %PUBLIC_URL%.
+          Solo i file all'interno della cartella `public` possono essere referenziati direttamente.
+
+          A differenza di "/favicon.ico" o "favicon.ico", "%PUBLIC_URL%/favicon.ico"
+          funzionerà correttamente durante la build offline e nelle app che non sono
+          servite dalla root URL. Scopri di più: https://cra.link/web-font
+        -->
+        <title>App Cantieri</title>
+
+        <!-- Meta tag per iOS PWA -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="App Cantieri">
+
+        <!-- QUESTO È IL LINK CRITICO PER TAILWIND CSS - DEVE ESSERE QUI! -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+      </head>
+      <body>
+        <noscript>Devi abilitare JavaScript per eseguire questa app.</noscript>
+        <div id="root"></div>
+         <!-- Forza nuovo hash per deployment -->
+        <!--
+          Questo file HTML è un template.
+          Se lo apri direttamente nel browser, vedrai una pagina vuota.
+
+          Puoi aggiungere webfonts, meta tag o script a questo file.
+          Il processo di build posizionerà gli script raggruppati nel tag <body>.
+
+          Per iniziare lo sviluppo, esegui `npm start` o `yarn start`.
+          Per creare una build di produzione, esegui `npm run build` o `yarn build`.
+        -->
+      </body>
+    </html>
+    
