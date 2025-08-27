@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { auth, db } from './firebaseConfig'; // Importa le istanze già inizializzate
+import { auth, db } from './firebaseConfig';
 
 /**
  * Custom hook per gestire lo stato di autenticazione e i dati utente.
- * Si occupa solo dell'autenticazione e del recupero del ruolo utente.
+ * Si occupa solo dell'autenticazione e del recupero dei dati utente.
  *
  * @returns {{currentUser: object, userRole: string, loadingAuth: boolean, userAziendaId: (string|null), handleLogout: function}}
  */
@@ -30,7 +30,16 @@ export const useAuthentication = () => {
                 const unsubscribeUserDoc = onSnapshot(userDocRef, (docSnap) => {
                     if (docSnap.exists()) {
                         const userData = docSnap.data();
-                        const userWithData = { ...user, ...userData };
+                        
+                        // AGGIORNA IL CODICE QUI:
+                        // Aggiunge i campi 'nome' e 'cognome' al documento utente
+                        const userWithData = { 
+                            ...user, 
+                            ...userData,
+                            nome: userData.nome || '', // Aggiunto il campo nome
+                            cognome: userData.cognome || '' // Aggiunto il campo cognome
+                        };
+                        
                         setCurrentUser(userWithData);
                         setUserRole(userData.ruolo);
                         setUserAziendaId(userData.companyID || null);
@@ -63,7 +72,7 @@ export const useAuthentication = () => {
 
     const handleLogout = async () => {
         try {
-            await auth.signOut();
+            await signOut(auth);
         } catch (error) {
             console.error("Errore durante il logout:", error);
         }

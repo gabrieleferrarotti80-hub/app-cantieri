@@ -12,6 +12,7 @@ import { auth } from './firebaseConfig';
 
 function App() {
     console.log("APP: Componente App renderizzato.");
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,7 +29,18 @@ function App() {
 
     useEffect(() => {
         console.log("APP: useEffect attivato. Stato corrente: loadingAuth:", loadingAuth, "currentUser:", !!currentUser, "userRole:", userRole);
-    }, [loadingAuth, currentUser, userRole]);
+        // Logga i dati dell'utente quando l'autenticazione è completa e l'utente è loggato
+        if (!loadingAuth && currentUser) {
+            console.log("------------------------------------------");
+            console.log("Dati utente ricevuti dall'hook useAuthentication:");
+            console.log("Nome:", currentUser.nome);
+            console.log("Cognome:", currentUser.cognome);
+            console.log("Ruolo:", userRole);
+            console.log("ID Azienda:", userAziendaId);
+            console.log("Oggetto currentUser completo:", currentUser);
+            console.log("------------------------------------------");
+        }
+    }, [loadingAuth, currentUser, userRole, userAziendaId]);
 
     const handleLogin = async (e) => {
         console.log("LOGIN: Funzione handleLogin avviata.");
@@ -121,13 +133,12 @@ function App() {
                         />
                     )}
                     {userRole === 'preposto' && (
-                        <PrepostoMask
-                            user={currentUser}
-                            onLogout={handleLogout}
-                            userAziendaId={userAziendaId}
-                        />
-
-                    )}
+                        <PrepostoMask
+                            user={currentUser}
+                            onLogout={handleLogout}
+                            userAziendaId={userAziendaId}
+                        />
+                    )}
                     {(userRole === 'proprietario' || userRole === 'it' || userRole === 'admin') && (
                         <GestoreMask
                             user={currentUser}
