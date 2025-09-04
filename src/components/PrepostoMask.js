@@ -25,7 +25,7 @@ const openFilePicker = (accept) => {
         input.click();
     });
 };
-
+// Commento temporaneo per forzare l'aggiornamento
 const PrepostoMask = ({ user, userData, onLogout }) => {
     const [cantieri, setCantieri] = useState([]);
     const [selectedCantiere, setSelectedCantiere] = useState('');
