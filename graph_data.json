@@ -1,0 +1,64 @@
+{
+  "App.js": [
+    "components/AmministratoreMask.js",
+    "components/GestoreMask.js",
+    "components/PrepostoMask.js",
+    "components/TecnicoMask.js",
+    "firebaseConfig.js",
+    "useAuthentication.js"
+  ],
+  "App.test.js": [
+    "App.js"
+  ],
+  "AppRecover.js": [],
+  "AppTest2 - Copia.js": [
+    "components/AmministratoreMask.js",
+    "components/GestoreMask.js",
+    "components/TecnicoMask.js",
+    "firebaseConfig.js",
+    "useAuthentication.js"
+  ],
+  "AppTest2.js": [
+    "components/AmministratoreMask.js",
+    "components/GestoreMask.js",
+    "components/TecnicoMask.js",
+    "firebaseConfig.js",
+    "useAuthentication.js"
+  ],
+  "components/ActionButtons.js": [],
+  "components/AmministratoreMask.js": [
+    "firebaseConfig.js"
+  ],
+  "components/DocumentModal.js": [],
+  "components/GestoreMask.js": [
+    "firebaseConfig.js"
+  ],
+  "components/LoginScreen.js": [
+    "firebaseConfig.js"
+  ],
+  "components/MaskLayout.jsx": [],
+  "components/PrepostoMask.js": [
+    "components/ActionButtons.js",
+    "components/DocumentModal.js",
+    "components/MaskLayout.jsx",
+    "firebaseConfig.js",
+    "hooks/useCantieri.js"
+  ],
+  "components/TecnicoMask.js": [
+    "firebaseConfig.js"
+  ],
+  "firebaseConfig.js": [],
+  "hooks/useCantieri.js": [],
+  "hooks/useReportSubmission.js": [],
+  "index.css": [],
+  "index.js": [
+    "App.js",
+    "index.css"
+  ],
+  "reportWebVitals.js": [],
+  "serviceWorkerRegistration.js": [],
+  "setupTests.js": [],
+  "useAuthentication.js": [
+    "firebaseConfig.js"
+  ]
+}

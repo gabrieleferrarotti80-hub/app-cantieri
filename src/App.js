@@ -78,92 +78,116 @@ function App() {
     console.log("RENDER: loadingAuth è false. Controllo se l'utente è loggato.");
 
     return (
-        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+        <div className="min-h-screen bg-gray-100 flex flex-col">
             {!currentUser ? (
-                <div className="login-container p-8 bg-white rounded-lg shadow-md w-96">
-                    <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
-                    <form onSubmit={handleLogin}>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                                Email
-                            </label>
-                            <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="email"
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="mb-6">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                                Password
-                            </label>
-                            <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                id="password"
-                                type="password"
-                                placeholder="******************"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        {loginError && <p className="text-red-500 text-xs italic mb-4">{loginError}</p>}
-                        <div className="flex items-center justify-between">
-                            <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-                                type="submit"
-                                disabled={loading}
-                            >
-                                {loading ? 'Accesso in corso...' : 'Accedi'}
-                            </button>
-                        </div>
-                    </form>
+                <div className="flex-grow flex items-center justify-center">
+                    <div className="login-container p-8 bg-white rounded-lg shadow-md w-96">
+                        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
+                        <form onSubmit={handleLogin}>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                                    Email
+                                </label>
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="email"
+                                    type="email"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+                                    Password
+                                </label>
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="password"
+                                    type="password"
+                                    placeholder="******************"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            {loginError && <p className="text-red-500 text-xs italic mb-4">{loginError}</p>}
+                            <div className="flex items-center justify-between">
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Accesso in corso...' : 'Accedi'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             ) : (
-                <div className="main-content w-full h-full">
-                    {userRole === 'titolare azienda' && (
-                        <AmministratoreMask
-                            user={currentUser}
-                            onLogout={handleLogout}
-                            userAziendaId={userAziendaId}
-                        />
-                    )}
-                    {userRole === 'preposto' && (
-                        <PrepostoMask
-                            user={currentUser}
-                            onLogout={handleLogout}
-                            userAziendaId={userAziendaId}
-                        />
-                    )}
-                    {(userRole === 'proprietario' || userRole === 'it' || userRole === 'admin') && (
-                        <GestoreMask
-                            user={currentUser}
-                            onLogout={handleLogout}
-                            userAziendaId={userAziendaId}
-                        />
-                    )}
-                    {userRole === 'tecnico' && (
-                        <TecnicoMask
-                            user={currentUser}
-                            onLogout={handleLogout}
-                            userAziendaId={userAziendaId}
-                        />
-                    )}
-                    {!userRole && (
-                        <div className="mt-8 p-6 bg-red-100 rounded-xl shadow-md text-red-800 text-center">
-                            <p>Impossibile determinare il tuo ruolo. Contatta l'amministratore.</p>
-                            <button
-                                onClick={handleLogout}
-                                className="mt-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 mx-auto"
-                            >
-                                <PowerIcon className="h-5 w-5" /> Logout
-                            </button>
+                <div className="main-content w-full h-full flex flex-col">
+                    <header className="w-full bg-white shadow-md p-4 flex justify-between items-center fixed top-0 left-0 z-50 border-b-4 border-indigo-500">
+                        <div className="flex items-center space-x-2">
+                             {currentUser.cognome && currentUser.nome && (
+                                <h1 className="text-lg font-semibold">Benvenuto, {currentUser.nome} {currentUser.cognome}</h1>
+                            )}
+                            <span className="text-sm text-gray-500">({userRole})</span>
+                            {userAziendaId && (
+                                <span className="text-sm text-gray-500 flex items-center space-x-1">
+                                    <BuildingOfficeIcon className="h-4 w-4 text-gray-400" />
+                                    <span>{userAziendaId}</span>
+                                </span>
+                            )}
                         </div>
-                    )}
+                        <button
+                            onClick={handleLogout}
+                            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2"
+                        >
+                            <PowerIcon className="h-5 w-5" /> Logout
+                        </button>
+                    </header>
+                    <div className="flex-grow p-4 mt-20">
+                        {userRole === 'titolare azienda' && (
+                            <AmministratoreMask
+                                user={currentUser}
+                                onLogout={handleLogout}
+                                userAziendaId={userAziendaId}
+                            />
+                        )}
+                        {userRole === 'preposto' && (
+                            <PrepostoMask
+                                user={currentUser}
+                                onLogout={handleLogout}
+                                userAziendaId={userAziendaId}
+                            />
+                        )}
+                        {(userRole === 'proprietario' || userRole === 'it' || userRole === 'admin') && (
+                            <GestoreMask
+                                user={currentUser}
+                                onLogout={handleLogout}
+                                userAziendaId={userAziendaId}
+                            />
+                        )}
+                        {userRole === 'tecnico' && (
+                            <TecnicoMask
+                                user={currentUser}
+                                onLogout={handleLogout}
+                                userAziendaId={userAziendaId}
+                            />
+                        )}
+                        {!userRole && (
+                            <div className="mt-8 p-6 bg-red-100 rounded-xl shadow-md text-red-800 text-center">
+                                <p>Impossibile determinare il tuo ruolo. Contatta l'amministratore.</p>
+                                <button
+                                    onClick={handleLogout}
+                                    className="mt-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 mx-auto"
+                                >
+                                    <PowerIcon className="h-5 w-5" /> Logout
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
